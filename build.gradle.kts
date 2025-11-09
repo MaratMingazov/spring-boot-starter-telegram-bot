@@ -12,6 +12,7 @@ plugins {
 
 dependencies {
     compileOnly("org.springframework.boot:spring-boot-starter:3.5.4")
+    implementation("com.github.pengrad:java-telegram-bot-api:9.2.0")
 }
 
 allprojects {
