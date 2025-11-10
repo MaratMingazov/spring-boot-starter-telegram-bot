@@ -47,6 +47,7 @@ java {
     withJavadocJar()
 }
 
+// ./gradlew build
 // ./gradlew publishToMavenLocal
 publishing {
     publications {
