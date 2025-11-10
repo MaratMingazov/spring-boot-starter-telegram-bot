@@ -39,7 +39,7 @@ tasks.getByName<Jar>("jar") {
 }
 
 // to be able to push into maven local
-group = "com.github.mingazovr"
+group = "com.github.maratmingazov"
 version = "1.0.0"
 
 java {
