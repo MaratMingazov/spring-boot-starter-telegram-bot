@@ -40,4 +40,9 @@ class TelegramBotAutoConfiguration {
             TelegramBotPollingService(bot)
         }
     }
+
+    @Bean
+    fun telegramBotControllerBeanPostProcessor(): TelegramBotControllerBeanPostProcessor? {
+        return TelegramBotControllerBeanPostProcessor()
+    }
 }
