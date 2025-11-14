@@ -47,6 +47,7 @@ java {
     withJavadocJar()
 }
 
+// ./gradlew clean build --refresh-dependencies
 // ./gradlew build
 // ./gradlew publishToMavenLocal
 publishing {

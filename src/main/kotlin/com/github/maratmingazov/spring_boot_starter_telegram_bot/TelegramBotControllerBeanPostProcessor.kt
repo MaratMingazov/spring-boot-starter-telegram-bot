@@ -11,11 +11,9 @@ import org.springframework.beans.factory.config.BeanPostProcessor
 class TelegramBotControllerBeanPostProcessor: BeanPostProcessor, SmartInitializingSingleton {
 
     override fun postProcessAfterInitialization(bean: Any, beanName: String): Any {
-        println("PostProcessAfterInitialization: $beanName")
         return bean
     }
 
     override fun afterSingletonsInstantiated() {
-        println("PostProcessAfterSingletonInstantiated FINISHED")
     }
 }

@@ -1,5 +1,6 @@
 package com.github.maratmingazov.spring_boot_starter_telegram_bot
 
+import ch.qos.logback.core.util.ExecutorServiceUtil
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.api.TelegramBotController
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.config.TelegramBotGlobalProperties
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.config.TelegramBotProperties
@@ -7,8 +8,11 @@ import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.Telegra
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotService
 import com.pengrad.telegrambot.TelegramBot
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.context.ApplicationListener
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.event.ContextClosedEvent
+import org.springframework.context.event.ContextRefreshedEvent
 
 /**
  * файл org.springframework.boot.autoconfigure.AutoConfiguration.imports
@@ -21,7 +25,9 @@ class TelegramBotAutoConfiguration {
 
     @Bean
     fun telegramBotGlobalProperties(): TelegramBotGlobalProperties {
-        return TelegramBotGlobalProperties()
+        return TelegramBotGlobalProperties(
+            ExecutorServiceUtil.newThreadPoolExecutor()
+        )
     }
 
     @Bean
@@ -42,7 +48,35 @@ class TelegramBotAutoConfiguration {
     }
 
     @Bean
-    fun telegramBotControllerBeanPostProcessor(): TelegramBotControllerBeanPostProcessor? {
+    fun telegramBotControllerBeanPostProcessor(): TelegramBotControllerBeanPostProcessor {
         return TelegramBotControllerBeanPostProcessor()
     }
+
+    /**
+     * 	Событие ContextRefreshedEvent публикуется, когда ApplicationContext был создан или обновлён полностью, то есть:
+     * 	1.	Все бины были созданы.
+     * 	2.	Все зависимости внедрены.
+     * 	3.	BeanPostProcessor’ы и все конфигурации выполнены.
+     */
+    @Bean
+    fun onContextRefreshed(
+        telegramBotGlobalProperties: TelegramBotGlobalProperties,
+        @Qualifier("telegramBotServices") telegramBotServices: List<TelegramBotService>,
+    ): ApplicationListener<ContextRefreshedEvent> {
+        return ApplicationListener { _ ->
+            telegramBotServices.forEach { service -> telegramBotGlobalProperties.taskExecutor.execute { service.start() } }
+        }
+    }
+
+    @Bean
+    fun onContextClosed(
+        telegramBotGlobalProperties: TelegramBotGlobalProperties,
+        @Qualifier("telegramBotServices") telegramBotServices: List<TelegramBotService>,
+    ): ApplicationListener<ContextClosedEvent> {
+        return ApplicationListener { _ ->
+            telegramBotServices.forEach { it.stop() }
+            telegramBotGlobalProperties.taskExecutor.shutdown()
+        }
+    }
+
 }
