@@ -1,6 +1,5 @@
 package com.github.maratmingazov.spring_boot_starter_telegram_bot
 
-import ch.qos.logback.core.util.ExecutorServiceUtil
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.api.TelegramBotController
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.config.TelegramBotGlobalProperties
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.config.TelegramBotProperties
@@ -13,6 +12,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.event.ContextClosedEvent
 import org.springframework.context.event.ContextRefreshedEvent
+import java.util.concurrent.Executors
 
 /**
  * файл org.springframework.boot.autoconfigure.AutoConfiguration.imports
@@ -25,8 +25,9 @@ class TelegramBotAutoConfiguration {
 
     @Bean
     fun telegramBotGlobalProperties(): TelegramBotGlobalProperties {
+        val a = Executors.newSingleThreadExecutor()
         return TelegramBotGlobalProperties(
-            ExecutorServiceUtil.newThreadPoolExecutor()
+            Executors.newSingleThreadExecutor() // создается non-daemon поток. Поэтому приложение будет работать, пока жив этот поток
         )
     }
 
