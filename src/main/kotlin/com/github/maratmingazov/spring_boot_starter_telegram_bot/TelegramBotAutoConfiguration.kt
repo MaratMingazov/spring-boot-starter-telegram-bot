@@ -1,8 +1,8 @@
 package com.github.maratmingazov.spring_boot_starter_telegram_bot
 
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.api.TelegramBotController
-import com.github.maratmingazov.spring_boot_starter_telegram_bot.api.config.TelegramBotGlobalProperties
-import com.github.maratmingazov.spring_boot_starter_telegram_bot.api.config.TelegramBotProperties
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.config.TelegramBotGlobalProperties
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.config.TelegramBotProperties
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotPollingService
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotService
 import com.pengrad.telegrambot.TelegramBot
