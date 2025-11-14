@@ -3,8 +3,10 @@ package com.github.maratmingazov.spring_boot_starter_telegram_bot
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.api.TelegramBotController
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.config.TelegramBotGlobalProperties
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.config.TelegramBotProperties
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.DefaultTelegramBotUpdatesHandler
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotPollingService
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotService
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotUpdatesHandler
 import com.pengrad.telegrambot.TelegramBot
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.ApplicationListener
@@ -38,13 +40,19 @@ class TelegramBotAutoConfiguration {
     }
 
     @Bean
+    fun telegramBotUpdatesHandler(): TelegramBotUpdatesHandler {
+        return DefaultTelegramBotUpdatesHandler()
+    }
+
+    @Bean
     @Qualifier("telegramBotServices")
     fun telegramBotService(
-        @Qualifier("telegramBotPropertiesList") telegramBotProperties: List<TelegramBotProperties>
+        @Qualifier("telegramBotPropertiesList") telegramBotProperties: List<TelegramBotProperties>,
+        telegramBotUpdatesHandler: TelegramBotUpdatesHandler,
     ): List<TelegramBotService> {
         return telegramBotProperties.map { botProperties ->
             val bot = TelegramBot(botProperties.token)
-            TelegramBotPollingService(bot)
+            TelegramBotPollingService(bot, botProperties, telegramBotUpdatesHandler)
         }
     }
 

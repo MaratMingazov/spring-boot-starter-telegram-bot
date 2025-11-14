@@ -4,9 +4,8 @@ import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.model.Update
 
 class DefaultTelegramBotUpdatesHandler: TelegramBotUpdatesHandler{
-    override fun process(token: String, bot: TelegramBot, updates: List<Update>
-    ) {
-        println("DefaultTelegramBotUpdatesHandler.process")
-        updates.forEach { update -> println(update.updateId())}
+
+    override fun process(token: String, bot: TelegramBot, updates: List<Update>) {
+        println("DefaultTelegramBotUpdatesHandler. ${updates.size}")
     }
 }
