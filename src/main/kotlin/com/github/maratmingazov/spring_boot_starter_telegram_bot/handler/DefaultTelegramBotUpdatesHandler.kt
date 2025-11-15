@@ -5,13 +5,15 @@ import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.model.Update
 
 class DefaultTelegramBotUpdatesHandler(
-    private val telegramBotGlobalProperties: TelegramBotGlobalProperties
+    private val telegramBotGlobalProperties: TelegramBotGlobalProperties,
+    private val requestDispatcher: RequestDispatcher,
 ): TelegramBotUpdatesHandler{
 
     override fun process(token: String, bot: TelegramBot, updates: List<Update>) {
         updates.forEach { update ->
             telegramBotGlobalProperties.taskExecutor.execute {
                 val telegramEvent = TelegramBotEvent(token, bot, update)
+                requestDispatcher.execute(telegramEvent)
             }
         }
     }

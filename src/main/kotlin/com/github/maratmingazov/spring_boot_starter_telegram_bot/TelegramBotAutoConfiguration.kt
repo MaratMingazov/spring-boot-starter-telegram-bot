@@ -4,6 +4,7 @@ import com.github.maratmingazov.spring_boot_starter_telegram_bot.api.TelegramBot
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.config.TelegramBotGlobalProperties
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.config.TelegramBotProperties
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.DefaultTelegramBotUpdatesHandler
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.RequestDispatcher
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotPollingService
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotService
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotUpdatesHandler
@@ -42,8 +43,14 @@ class TelegramBotAutoConfiguration {
     @Bean
     fun telegramBotUpdatesHandler(
         telegramBotGlobalProperties: TelegramBotGlobalProperties,
+        requestDispatcher: RequestDispatcher
     ): TelegramBotUpdatesHandler {
-        return DefaultTelegramBotUpdatesHandler(telegramBotGlobalProperties)
+        return DefaultTelegramBotUpdatesHandler(telegramBotGlobalProperties, requestDispatcher)
+    }
+
+    @Bean
+    fun requestDispatcher(): RequestDispatcher {
+        return RequestDispatcher()
     }
 
     @Bean
