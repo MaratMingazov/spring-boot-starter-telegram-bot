@@ -1,11 +1,18 @@
 package com.github.maratmingazov.spring_boot_starter_telegram_bot.handler
 
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.config.TelegramBotGlobalProperties
 import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.model.Update
 
-class DefaultTelegramBotUpdatesHandler: TelegramBotUpdatesHandler{
+class DefaultTelegramBotUpdatesHandler(
+    private val telegramBotGlobalProperties: TelegramBotGlobalProperties
+): TelegramBotUpdatesHandler{
 
     override fun process(token: String, bot: TelegramBot, updates: List<Update>) {
-        println("DefaultTelegramBotUpdatesHandler. ${updates.size}")
+        updates.forEach { update ->
+            telegramBotGlobalProperties.taskExecutor.execute {
+                val telegramEvent = TelegramBotEvent(token, bot, update)
+            }
+        }
     }
 }

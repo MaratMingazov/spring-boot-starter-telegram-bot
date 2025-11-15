@@ -40,8 +40,10 @@ class TelegramBotAutoConfiguration {
     }
 
     @Bean
-    fun telegramBotUpdatesHandler(): TelegramBotUpdatesHandler {
-        return DefaultTelegramBotUpdatesHandler()
+    fun telegramBotUpdatesHandler(
+        telegramBotGlobalProperties: TelegramBotGlobalProperties,
+    ): TelegramBotUpdatesHandler {
+        return DefaultTelegramBotUpdatesHandler(telegramBotGlobalProperties)
     }
 
     @Bean
