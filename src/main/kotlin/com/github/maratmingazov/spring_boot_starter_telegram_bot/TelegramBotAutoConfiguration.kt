@@ -66,8 +66,15 @@ class TelegramBotAutoConfiguration {
     }
 
     @Bean
-    fun telegramBotControllerBeanPostProcessor(): TelegramBotControllerBeanPostProcessor {
-        return TelegramBotControllerBeanPostProcessor()
+    fun handlerMethodContainer(): HandlerMethodContainer {
+        return HandlerMethodContainer()
+    }
+
+    @Bean
+    fun telegramBotControllerBeanPostProcessor(
+        handlerMethodContainer: HandlerMethodContainer
+    ): TelegramBotControllerBeanPostProcessor {
+        return TelegramBotControllerBeanPostProcessor(handlerMethodContainer)
     }
 
     /**
