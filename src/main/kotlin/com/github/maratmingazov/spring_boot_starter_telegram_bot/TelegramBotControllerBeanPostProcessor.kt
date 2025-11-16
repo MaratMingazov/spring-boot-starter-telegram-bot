@@ -18,7 +18,9 @@ import org.springframework.core.MethodIntrospector;
  * {BotRequest} annotations in methods and store the meta
  * information into {HandlerMethodContainer}.
  */
-class TelegramBotControllerBeanPostProcessor(): BeanPostProcessor, SmartInitializingSingleton {
+class TelegramBotControllerBeanPostProcessor(
+    private val handlerMethodContainer: HandlerMethodContainer
+): BeanPostProcessor, SmartInitializingSingleton {
 
     companion object {
         private val logger = LoggerFactory.getLogger(TelegramBotControllerBeanPostProcessor::class.java)
@@ -32,10 +34,17 @@ class TelegramBotControllerBeanPostProcessor(): BeanPostProcessor, SmartInitiali
         val targetClass =  AopUtils.getTargetClass(bean)
         if (TelegramBotController::class.java.isAssignableFrom(targetClass) &&
             AnnotationUtils.findAnnotation(targetClass, BotController::class.java) != null) {
-            // мы нашли класс, унаследованный от TelegramBotController и с имеющий аннотацию @BotController
+            // Мы нашли класс, унаследованный от TelegramBotController и с имеющий аннотацию @BotController
             val controller = bean as TelegramBotController
+            // находим методы, которые помечены аннотацией @BotRequest
             val annotatedMethods = findAnnotatedMethodsBotRequest(controller.getToken(), targetClass)
-            logger.info("Telegram Bot controller for $beanName has been found.")
+            annotatedMethods.forEach { (method, mappingInfos) ->
+                val invocableMethod = AopUtils.selectInvocableMethod(method, targetClass)
+                // Осталось запомнить наш контроллер и метод
+                handlerMethodContainer.registerController(bean, invocableMethod, mappingInfos)
+                logger.info("Telegram Bot controller  $beanName / ${invocableMethod.name} has been found and registered.")
+            }
+
         }
         return bean
     }
@@ -45,8 +54,9 @@ class TelegramBotControllerBeanPostProcessor(): BeanPostProcessor, SmartInitiali
             targetClass,
             MethodIntrospector.MetadataLookup<List<RequestMappingInfo>> { method ->
                 // Перебираем все методы найденного контроллера
-                // Проверяем есть ли на методы аннотация BotRequest
+                // Проверяем есть ли на методе аннотация @BotRequest(value=arrayOf("/hello"), type=arrayOf(MessageType.CALLBACK_QUERY, MessageType.MESSAGE))
                 val requestMapping = AnnotatedElementUtils.findMergedAnnotation(method, BotRequest::class.java) ?: return@MetadataLookup null
+                // Смотрим какие MessageTypes прописаны у этой анноатации  type=arrayOf(MessageType.CALLBACK_QUERY, MessageType.MESSAGE)
                 val types = requestMapping.type.toSet()
 
                 // Если path не указан
@@ -60,9 +70,9 @@ class TelegramBotControllerBeanPostProcessor(): BeanPostProcessor, SmartInitiali
                 return@MetadataLookup requestMapping.path.map { path ->
                     RequestMappingInfo(
                         token,
-                        path,
+                        path, // "/hello"
                         requestMapping.path.size,
-                        types
+                        types // arrayOf(MessageType.CALLBACK_QUERY, MessageType.MESSAGE)
                     )
                 }
             }
