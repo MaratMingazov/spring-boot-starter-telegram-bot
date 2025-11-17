@@ -14,7 +14,7 @@ data class TelegramBotEvent(
     val message: Message? = null,
     val chat: Chat? = null,
     val user: User? = null,
-    val text: String? = null,
+    val text: String,
     val messageType: MessageType,
 ) {
 
@@ -40,7 +40,7 @@ data class TelegramBotEvent(
                 message = message,
                 chat = chat,
                 user = user,
-                text = text,
+                text = text?:"",
                 messageType = messageType
             )
         }

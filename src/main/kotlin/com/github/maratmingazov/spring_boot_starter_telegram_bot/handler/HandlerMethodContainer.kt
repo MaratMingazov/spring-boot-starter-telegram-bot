@@ -7,6 +7,9 @@ import java.lang.reflect.Method
 
 class HandlerMethodContainer {
 
+    /**
+     * Содержит свзять telegramToken и список @BotRequest методов с информацией о методе
+     */
     val handlers: MutableMap<String, MutableList<RequestMapping>> = hashMapOf()
     var matcherStrategy: RequestMappingsMatcherStrategy? = null
 
@@ -19,13 +22,26 @@ class HandlerMethodContainer {
     }
 
     fun lookupHandlerMethod(telegramBotEvent: TelegramBotEvent): HandlerLookupResult {
+        // Получаем список @BotRequest методов для текущего telegram token
+        val botRequestMethods = handlers[telegramBotEvent.token]
+        botRequestMethods?.let {
+            // Перебираем все методы и проверяем может ли этот метод обработать наш Event
+            it.forEach { botMapping ->
+                val info = botMapping.mappingInfo
+                if (info.token == telegramBotEvent.token && matcherStrategy!!.isMatched(telegramBotEvent, info)) {
+                    val variables = matcherStrategy!!.extractPatternVariables(telegramBotEvent.text, info)
+                    return HandlerLookupResult(botMapping.handlerMethod, info.pattern, variables)
+                }
+            }
+        }
         return HandlerLookupResult()
+
     }
 }
 
 data class RequestMapping(
-    private val mappingInfo: RequestMappingInfo? = null,
-    private val handlerMethod: HandlerMethod? = null,
+    val mappingInfo: RequestMappingInfo,
+    val handlerMethod: HandlerMethod,
 )
 
 data class HandlerLookupResult(
