@@ -14,7 +14,7 @@ class DefaultTelegramBotUpdatesHandler(
     override fun process(token: String, bot: TelegramBot, updates: List<Update>) {
         updates.forEach { update ->
             telegramBotGlobalProperties.taskExecutor.execute {
-                val telegramEvent = TelegramBotEvent(token, bot, update)
+                val telegramEvent = TelegramBotEvent.fromUpdate(token, bot, update)
                 requestDispatcher.execute(telegramEvent)
             }
         }
