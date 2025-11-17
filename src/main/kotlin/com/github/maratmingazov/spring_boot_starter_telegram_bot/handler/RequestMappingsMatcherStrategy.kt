@@ -8,7 +8,13 @@ import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.process
  */
 interface RequestMappingsMatcherStrategy {
 
-    fun postProcess(mappings: List<RequestMapping>)
+    /**
+     * Мы хотим отсортировать методы @BotRequest
+     * Первыми хотим расположить методы, у которых есть path, например /start
+     * Чтобы если пользователь передал команду, найти в вызвать их
+     * В конце будут находиться методы, которые могут обрабатывать любые сообщения
+     */
+    fun postProcess(mappings: List<RequestMapping>): List<RequestMapping>
 
     /**
      * Проверяем может ли данный метод (mappingInfo содержит информацию о методе) обработать данный telegramEvent

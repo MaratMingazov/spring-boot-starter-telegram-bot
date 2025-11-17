@@ -63,7 +63,8 @@ class TelegramBotControllerBeanPostProcessor(
                 // Если path не указан
                 if (requestMapping.path.isEmpty()) {
                     return@MetadataLookup listOf(
-                        RequestMappingInfo(token, null, Int.MAX_VALUE, types)
+                        // Указываем ** - значит может любые запросы обрабатывать
+                        RequestMappingInfo(token, "**", Int.MAX_VALUE, types)
                     )
                 }
 
@@ -71,7 +72,7 @@ class TelegramBotControllerBeanPostProcessor(
                 return@MetadataLookup requestMapping.path.map { path ->
                     RequestMappingInfo(
                         token,
-                        path, // "/hello"
+                        path, // "/start"
                         requestMapping.path.size,
                         types // arrayOf(MessageType.CALLBACK_QUERY, MessageType.MESSAGE)
                     )

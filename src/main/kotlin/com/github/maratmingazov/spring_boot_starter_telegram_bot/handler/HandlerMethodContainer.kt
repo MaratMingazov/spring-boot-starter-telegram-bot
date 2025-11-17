@@ -12,6 +12,13 @@ class HandlerMethodContainer {
      */
     val handlers: MutableMap<String, MutableList<RequestMapping>> = hashMapOf()
     var matcherStrategy: RequestMappingsMatcherStrategy? = null
+        set(value) {
+            field = value
+            // Мы еще хотим дополнительно отсортировать наши @BotRequest методы
+            // Чтобы наверху оказались методы, у которых задан pattern
+            // А последними будут проверяться методы универсальные, которые могут любое сообщение обработать
+            handlers.replaceAll { _, value -> field.postProcess(value) }
+        }
 
     fun registerController(bean: Any, method: Method, mappingInfo: List<RequestMappingInfo> ): HandlerMethod? {
         if (mappingInfo.isEmpty()) return null
