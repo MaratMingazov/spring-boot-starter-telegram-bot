@@ -1,6 +1,6 @@
 package com.github.maratmingazov.spring_boot_starter_telegram_bot.handler
 
-import com.github.maratmingazov.spring_boot_starter_telegram_bot.RequestMapping
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.TelegramBotEvent
 
 /**
  * У контроллера может быть несколько методов помеченных @BotRequest аннотацией

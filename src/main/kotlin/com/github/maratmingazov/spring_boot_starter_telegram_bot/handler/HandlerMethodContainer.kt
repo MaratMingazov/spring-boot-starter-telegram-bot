@@ -1,8 +1,7 @@
-package com.github.maratmingazov.spring_boot_starter_telegram_bot
+package com.github.maratmingazov.spring_boot_starter_telegram_bot.handler
 
-import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.RequestMappingInfo
-import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.RequestMappingsMatcherStrategy
-import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotEvent
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.HandlerMethod
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.TelegramBotEvent
 import java.lang.reflect.Method
 
 

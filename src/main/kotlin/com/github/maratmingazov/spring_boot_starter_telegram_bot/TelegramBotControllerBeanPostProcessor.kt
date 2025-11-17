@@ -3,6 +3,7 @@ package com.github.maratmingazov.spring_boot_starter_telegram_bot
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.annotation.BotController
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.annotation.BotRequest
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.api.TelegramBotController
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.HandlerMethodContainer
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.RequestMappingInfo
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.SmartInitializingSingleton

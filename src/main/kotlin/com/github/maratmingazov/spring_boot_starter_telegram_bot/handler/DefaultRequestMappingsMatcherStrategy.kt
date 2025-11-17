@@ -1,6 +1,6 @@
 package com.github.maratmingazov.spring_boot_starter_telegram_bot.handler
 
-import com.github.maratmingazov.spring_boot_starter_telegram_bot.RequestMapping
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.TelegramBotEvent
 
 class DefaultRequestMappingsMatcherStrategy(): RequestMappingsMatcherStrategy, Comparator<RequestMappingInfo> {
     override fun postProcess(mappings: List<RequestMapping>) {

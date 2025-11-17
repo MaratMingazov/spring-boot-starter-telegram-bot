@@ -1,7 +1,6 @@
 package com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor
 
-import com.github.maratmingazov.spring_boot_starter_telegram_bot.HandlerMethodContainer
-import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotEvent
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.HandlerMethodContainer
 
 class RequestDispatcher(
     private val handlerMethodContainer: HandlerMethodContainer,
