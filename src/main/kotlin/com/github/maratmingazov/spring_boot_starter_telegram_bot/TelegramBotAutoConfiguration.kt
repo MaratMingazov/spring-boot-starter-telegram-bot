@@ -100,7 +100,13 @@ class TelegramBotAutoConfiguration {
     fun onContextRefreshed(
         telegramBotGlobalProperties: TelegramBotGlobalProperties,
         @Qualifier("telegramBotServices") telegramBotServices: List<TelegramBotService>,
+        handlerMethodContainer: HandlerMethodContainer,
     ): ApplicationListener<ContextRefreshedEvent> {
+        /**
+         * Matcher Strategy определяет каким образом мы внутри контроллера находит методы для вызова
+         * Если пользователь не задал своб стратегию, мы возьмем default strategy.
+         */
+        handlerMethodContainer.matcherStrategy = telegramBotGlobalProperties.requestMappingMatcherStrategy
         return ApplicationListener { _ ->
             telegramBotServices.forEach { service -> telegramBotGlobalProperties.taskExecutor.execute { service.start() } }
         }
