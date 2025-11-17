@@ -9,4 +9,5 @@ enum class MessageType {
     MESSAGE,
     EDITED_MESSAGE,
     CALLBACK_QUERY,
+    UNSUPPORTED,
 }
