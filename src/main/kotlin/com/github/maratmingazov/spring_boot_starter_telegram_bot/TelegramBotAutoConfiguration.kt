@@ -3,13 +3,16 @@ package com.github.maratmingazov.spring_boot_starter_telegram_bot
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.api.TelegramBotController
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.config.TelegramBotGlobalProperties
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.config.TelegramBotProperties
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.DefaultRequestMappingsMatcherStrategy
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.DefaultTelegramBotUpdatesHandler
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.RequestDispatcher
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.RequestMappingsMatcherStrategy
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotPollingService
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotService
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotUpdatesHandler
 import com.pengrad.telegrambot.TelegramBot
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.ApplicationListener
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -27,10 +30,18 @@ import java.util.concurrent.Executors
 class TelegramBotAutoConfiguration {
 
     @Bean
-    fun telegramBotGlobalProperties(): TelegramBotGlobalProperties {
-        val a = Executors.newSingleThreadExecutor()
+    @ConditionalOnMissingBean(RequestMappingsMatcherStrategy::class)
+    fun defaultRequestMappingMatcherStrategy(): RequestMappingsMatcherStrategy {
+        return DefaultRequestMappingsMatcherStrategy()
+    }
+
+    @Bean
+    fun telegramBotGlobalProperties(
+        matcherStrategy: RequestMappingsMatcherStrategy,
+    ): TelegramBotGlobalProperties {
         return TelegramBotGlobalProperties(
-            Executors.newSingleThreadExecutor() // создается non-daemon поток. Поэтому приложение будет работать, пока жив этот поток
+            Executors.newSingleThreadExecutor(), // создается non-daemon поток. Поэтому приложение будет работать, пока жив этот поток
+                    matcherStrategy,
         )
     }
 
@@ -49,8 +60,10 @@ class TelegramBotAutoConfiguration {
     }
 
     @Bean
-    fun requestDispatcher(): RequestDispatcher {
-        return RequestDispatcher()
+    fun requestDispatcher(
+        handlerMethodContainer: HandlerMethodContainer,
+    ): RequestDispatcher {
+        return RequestDispatcher(handlerMethodContainer)
     }
 
     @Bean
