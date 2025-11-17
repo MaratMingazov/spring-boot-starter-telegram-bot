@@ -21,10 +21,6 @@ class HandlerMethodContainer {
     fun lookupHandlerMethod(telegramBotEvent: TelegramBotEvent): HandlerLookupResult {
         return HandlerLookupResult()
     }
-
-    fun setMatcherStrategy(matcherStrategy: RequestMappingsMatcherStrategy) {
-        this.matcherStrategy = matcherStrategy
-    }
 }
 
 data class RequestMapping(
