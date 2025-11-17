@@ -5,7 +5,7 @@ import com.github.maratmingazov.spring_boot_starter_telegram_bot.config.Telegram
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.config.TelegramBotProperties
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.DefaultRequestMappingsMatcherStrategy
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.DefaultTelegramBotUpdatesHandler
-import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.RequestDispatcher
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.RequestDispatcher
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.RequestMappingsMatcherStrategy
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotPollingService
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotService
@@ -104,7 +104,7 @@ class TelegramBotAutoConfiguration {
     ): ApplicationListener<ContextRefreshedEvent> {
         /**
          * Matcher Strategy определяет каким образом мы внутри контроллера находит методы для вызова
-         * Если пользователь не задал своб стратегию, мы возьмем default strategy.
+         * Если пользователь не задал свою стратегию, мы возьмем default strategy.
          */
         handlerMethodContainer.matcherStrategy = telegramBotGlobalProperties.requestMappingMatcherStrategy
         return ApplicationListener { _ ->
