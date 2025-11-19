@@ -13,6 +13,8 @@ import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.Telegra
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotUpdatesHandler
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.arguments.BotHandlerMethodArgumentResolver
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.arguments.BotHandlerMethodArgumentResolverComposite
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.response.BotHandlerMethodReturnValueHandler
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.response.BotHandlerMethodReturnValueHandlerComposite
 import com.pengrad.telegrambot.TelegramBot
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
@@ -44,11 +46,13 @@ class TelegramBotAutoConfiguration {
     fun telegramBotGlobalProperties(
         matcherStrategy: RequestMappingsMatcherStrategy,
         argumentResolvers: List<BotHandlerMethodArgumentResolver>,
+        returnValueHandlers: List<BotHandlerMethodReturnValueHandler>,
     ): TelegramBotGlobalProperties {
         return TelegramBotGlobalProperties(
             Executors.newSingleThreadExecutor(), // создается non-daemon поток. Поэтому приложение будет работать, пока жив этот поток
                     matcherStrategy,
             argumentResolvers,
+            returnValueHandlers,
         )
     }
 
@@ -72,7 +76,8 @@ class TelegramBotAutoConfiguration {
         telegramBotGlobalProperties: TelegramBotGlobalProperties,
     ): RequestDispatcher {
         val argumentResolver = BotHandlerMethodArgumentResolverComposite(telegramBotGlobalProperties.argumentResolvers)
-        return RequestDispatcher(handlerMethodContainer, argumentResolver)
+        val returnValueHandlers = BotHandlerMethodReturnValueHandlerComposite(telegramBotGlobalProperties.returnValueHandlers)
+        return RequestDispatcher(handlerMethodContainer, argumentResolver, returnValueHandlers)
     }
 
     @Bean

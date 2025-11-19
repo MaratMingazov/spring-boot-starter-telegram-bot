@@ -4,10 +4,12 @@ import com.github.maratmingazov.spring_boot_starter_telegram_bot.api.TelegramBot
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.HandlerLookupResult
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.HandlerMethodContainer
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.arguments.BotHandlerMethodArgumentResolver
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.response.BotHandlerMethodReturnValueHandler
 
 class RequestDispatcher(
     private val handlerMethodContainer: HandlerMethodContainer,
     private val argumentResolver: BotHandlerMethodArgumentResolver,
+    private val returnValueHandler: BotHandlerMethodReturnValueHandler,
 ) {
 
     /**
@@ -38,6 +40,7 @@ class RequestDispatcher(
         telegramBotRequest: TelegramBotRequest,
         lookupResult: HandlerLookupResult,
     ) {
-        // нужен argumentResolver
+        // argumentResolver
+        // returnValueHandler
     }
 }
