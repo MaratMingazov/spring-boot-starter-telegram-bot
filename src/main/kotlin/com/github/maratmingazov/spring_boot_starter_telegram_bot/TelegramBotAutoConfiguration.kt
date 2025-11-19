@@ -19,6 +19,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.ApplicationListener
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Import
 import org.springframework.context.event.ContextClosedEvent
 import org.springframework.context.event.ContextRefreshedEvent
 import java.util.concurrent.Executors
@@ -30,6 +31,7 @@ import java.util.concurrent.Executors
  * Текущая конфигурация подключится в проект и создадутся объявленные бины.
  */
 @Configuration
+@Import(MethodProcessorsConfiguration::class)
 class TelegramBotAutoConfiguration {
 
     @Bean
