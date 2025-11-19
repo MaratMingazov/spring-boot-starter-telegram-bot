@@ -11,6 +11,8 @@ import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.Request
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotPollingService
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotService
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.TelegramBotUpdatesHandler
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.arguments.BotHandlerMethodArgumentResolver
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.arguments.BotHandlerMethodArgumentResolverComposite
 import com.pengrad.telegrambot.TelegramBot
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
@@ -39,10 +41,12 @@ class TelegramBotAutoConfiguration {
     @Bean
     fun telegramBotGlobalProperties(
         matcherStrategy: RequestMappingsMatcherStrategy,
+        argumentResolvers: List<BotHandlerMethodArgumentResolver>,
     ): TelegramBotGlobalProperties {
         return TelegramBotGlobalProperties(
             Executors.newSingleThreadExecutor(), // создается non-daemon поток. Поэтому приложение будет работать, пока жив этот поток
                     matcherStrategy,
+            argumentResolvers,
         )
     }
 
@@ -63,8 +67,10 @@ class TelegramBotAutoConfiguration {
     @Bean
     fun requestDispatcher(
         handlerMethodContainer: HandlerMethodContainer,
+        telegramBotGlobalProperties: TelegramBotGlobalProperties,
     ): RequestDispatcher {
-        return RequestDispatcher(handlerMethodContainer)
+        val argumentResolver = BotHandlerMethodArgumentResolverComposite(telegramBotGlobalProperties.argumentResolvers)
+        return RequestDispatcher(handlerMethodContainer, argumentResolver)
     }
 
     @Bean

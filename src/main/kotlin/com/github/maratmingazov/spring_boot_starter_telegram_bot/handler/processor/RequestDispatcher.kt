@@ -3,9 +3,11 @@ package com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.proces
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.api.TelegramBotRequest
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.HandlerLookupResult
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.HandlerMethodContainer
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.arguments.BotHandlerMethodArgumentResolver
 
 class RequestDispatcher(
     private val handlerMethodContainer: HandlerMethodContainer,
+    private val argumentResolver: BotHandlerMethodArgumentResolver,
 ) {
 
     /**
