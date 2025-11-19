@@ -7,16 +7,16 @@ import com.pengrad.telegrambot.model.Message
 import com.pengrad.telegrambot.model.Update
 import com.pengrad.telegrambot.model.User
 
-data class TelegramRequest(
+data class TelegramBotRequest(
     val telegramBot: TelegramBot,
     val update: Update, // это update который прислал telegramBot
     val messageType: MessageType,
-    val basePattern: String,
-    val templateVariables: Map<String, String>,
-    val message: Message,
+    val basePattern: String? = null,
+    val templateVariables: Map<String, String>? = null,
+    val message: Message? = null,
     val text: String,
-    val chat: Chat,
-    val user: User,
+    val chat: Chat? = null,
+    val user: User? = null,
     val callback: Callback<*,*>? = null,
     ) {
 }
