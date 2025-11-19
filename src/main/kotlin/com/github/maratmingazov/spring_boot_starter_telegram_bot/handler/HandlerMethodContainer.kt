@@ -17,7 +17,7 @@ class HandlerMethodContainer {
             // Мы еще хотим дополнительно отсортировать наши @BotRequest методы
             // Чтобы наверху оказались методы, у которых задан pattern
             // А последними будут проверяться методы универсальные, которые могут любое сообщение обработать
-            handlers.replaceAll { _, value -> field.postProcess(value) }
+            field?.let { handlers.replaceAll { _, mappings -> it.postProcess(mappings) } }
         }
 
     fun registerController(bean: Any, method: Method, mappingInfo: List<RequestMappingInfo> ): HandlerMethod? {

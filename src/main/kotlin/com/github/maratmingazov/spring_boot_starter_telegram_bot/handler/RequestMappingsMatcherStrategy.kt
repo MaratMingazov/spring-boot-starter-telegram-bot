@@ -14,7 +14,7 @@ interface RequestMappingsMatcherStrategy {
      * Чтобы если пользователь передал команду, найти в вызвать их
      * В конце будут находиться методы, которые могут обрабатывать любые сообщения
      */
-    fun postProcess(mappings: List<RequestMapping>): List<RequestMapping>
+    fun postProcess(mappings: List<RequestMapping>): MutableList<RequestMapping>
 
     /**
      * Проверяем может ли данный метод (mappingInfo содержит информацию о методе) обработать данный telegramEvent

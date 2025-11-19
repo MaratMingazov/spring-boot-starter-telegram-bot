@@ -8,7 +8,7 @@ class DefaultRequestMappingsMatcherStrategy(): RequestMappingsMatcherStrategy, C
 
     private val pathMatcher = AntPathMatcher()
 
-    override fun postProcess(mappings: List<RequestMapping>): List<RequestMapping> {
+    override fun postProcess(mappings: List<RequestMapping>): MutableList<RequestMapping> {
         val result = mappings.toMutableList()
         result.sortWith { a, b -> compare(a.mappingInfo, b.mappingInfo) }
         return result
