@@ -53,8 +53,11 @@ class RequestDispatcher(
         request: TelegramBotRequest,
         handlerMethod: HandlerMethod,
     ): BaseRequest<*,*>? {
-        val result = TelegramInvocableHandlerMethod(handlerMethod, argumentResolver, returnValueHandler).invokeAndHandle()
-        logger.info("${request.messageType} request was executed by ${handlerMethod.simpleName()} with ${result?.let { it.javaClass.simpleName } ?: "null"} result")
+        /**
+         * У нас есть handlerMethod, который нам нужно вызвать.
+         */
+        val result = TelegramInvocableHandlerMethod(handlerMethod, argumentResolver, returnValueHandler).invokeAndHandle(request)
+        logger.info("${request.messageType} request was executed by ${handlerMethod.simpleName()} with ${result?.javaClass?.simpleName ?: "null"} result")
         return result
     }
 }
