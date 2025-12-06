@@ -7,5 +7,5 @@ interface BotHandlerMethodArgumentResolver {
 
     fun supportsParameters(methodParameter: MethodParameter): Boolean
 
-    fun resolveArgument(methodParameter: MethodParameter, telegramBotRequest: TelegramBotRequest): Any
+    fun resolveArgument(methodParameter: MethodParameter, telegramBotRequest: TelegramBotRequest): Any?
 }

@@ -12,7 +12,7 @@ class BotRequestMethodPathArgumentResolver(): BotHandlerMethodArgumentResolver {
     override fun resolveArgument(
         methodParameter: MethodParameter,
         telegramBotRequest: TelegramBotRequest
-    ): Any {
-        return ""
+    ): Any? {
+        return null
     }
 }

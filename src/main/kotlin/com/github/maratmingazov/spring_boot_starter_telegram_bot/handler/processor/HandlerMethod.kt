@@ -37,10 +37,6 @@ open class HandlerMethod(
     val methodParameters: Array<MethodParameter> = initMethodParameters()
 
     constructor(handlerMethod: HandlerMethod) : this(handlerMethod.bean, handlerMethod.method) {
-        // bridgedMethod и methodParameters будут инициализированы первичным конструктором,
-        // но если важно скопировать *точно* такие же ссылки, можно явно прописать:
-        // this.bridgedMethod = handlerMethod.bridgedMethod
-        // this.methodParameters = handlerMethod.methodParameters
     }
 
 
