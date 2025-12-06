@@ -48,7 +48,7 @@ java {
 }
 
 // ./gradlew clean build --refresh-dependencies
-// ./gradlew build
+// ./gradlew clean build
 // ./gradlew publishToMavenLocal
 publishing {
     publications {

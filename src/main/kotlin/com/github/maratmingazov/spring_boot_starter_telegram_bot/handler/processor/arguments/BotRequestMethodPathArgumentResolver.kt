@@ -13,6 +13,7 @@ class BotRequestMethodPathArgumentResolver(): BotHandlerMethodArgumentResolver {
         methodParameter: MethodParameter,
         telegramBotRequest: TelegramBotRequest
     ): Any? {
+        val paramType = methodParameter.parameterType
         return null
     }
 }
