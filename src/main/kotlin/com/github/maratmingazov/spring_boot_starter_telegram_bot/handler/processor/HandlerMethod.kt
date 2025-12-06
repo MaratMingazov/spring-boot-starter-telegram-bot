@@ -19,6 +19,11 @@ open class HandlerMethod(
 ) {
 
     val beanType: Class<*> = ClassUtils.getUserClass(bean)
+
+    /**
+     * Сам метод помеченный аннотацией @BotRequest может быть обернут в прокси
+     * Поэтому здесь нам нужно найти искомый метод,
+     */
     val bridgedMethod: Method = BridgeMethodResolver.findBridgedMethod(method)
 
     /**
