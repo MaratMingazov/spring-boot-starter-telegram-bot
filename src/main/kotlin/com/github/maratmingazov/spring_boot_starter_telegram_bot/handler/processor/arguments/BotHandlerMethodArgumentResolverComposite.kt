@@ -13,7 +13,7 @@ class BotHandlerMethodArgumentResolverComposite(
     }
 
     override fun supportsParameters(methodParameter: MethodParameter): Boolean {
-        return false
+        return getArgumentResolver(methodParameter) != null
     }
 
     override fun resolveArgument(
