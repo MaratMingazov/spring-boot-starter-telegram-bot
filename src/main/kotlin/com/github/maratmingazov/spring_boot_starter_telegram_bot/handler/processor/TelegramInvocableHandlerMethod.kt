@@ -5,6 +5,8 @@ import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.process
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.response.BotHandlerMethodReturnValueHandler
 import com.pengrad.telegrambot.request.BaseRequest
 import org.springframework.core.DefaultParameterNameDiscoverer
+import org.springframework.util.ReflectionUtils
+import java.lang.reflect.InvocationTargetException
 
 class TelegramInvocableHandlerMethod(
     private val handlerMethod: HandlerMethod,
@@ -15,8 +17,39 @@ class TelegramInvocableHandlerMethod(
     private val parameterNameDiscoverer = DefaultParameterNameDiscoverer()
 
     fun invokeAndHandle(telegramBotRequest: TelegramBotRequest): BaseRequest<*, *>? {
+        /**
+         * Мы значит хотим вызвать метод, помеченный аннотацией @BotRequest
+         * У этого метода мы знаем параметры.
+         * Мы должны определеить какие значения будем передавать в эти параметры
+         * Для этого мы просто захардкодили, что в зависимости от типа параметра, мы передаем определенное значение
+         */
         val args = getMethodArgumentValues(telegramBotRequest)
+
+        /**
+         * теперь собственное нужно вызвать метод и передать туда эти аргументы
+         */
+        val result = doSafeInvoke(args)
+
+
         throw RuntimeException("")
+    }
+
+    /**
+     * Мы вызываем метод пользователя и передаем туда аргументы
+     */
+    private fun doSafeInvoke(args:  Array<Any?>): Any {
+        ReflectionUtils.makeAccessible(bridgedMethod)
+        try {
+            val result = bridgedMethod.invoke(bean, *args)
+            return result
+        } catch (ex: InvocationTargetException) {
+            val targetException: Throwable? = ex.getTargetException()
+            val text = "Failed to invoke handler method $args"
+            throw IllegalStateException(text, targetException)
+        } catch (ex: Exception) {
+            val text = "message: ${ex.message}, args: $args"
+            throw IllegalStateException(text, ex)
+        }
     }
 
     /**
@@ -36,6 +69,9 @@ class TelegramInvocableHandlerMethod(
          */
         val parameters = methodParameters
 
+        /**
+         * Тут мы для каждого параметра должны подобрать знечение, которые мы будем передавать в метод
+         */
         val arguments = parameters.map { parameter ->
             parameter.initParameterNameDiscovery(parameterNameDiscoverer)
             val argument = argumentResolver.resolveArgument(parameter, telegramBotRequest)

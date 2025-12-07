@@ -14,7 +14,7 @@ import java.lang.reflect.Method
  * Для каждого такого найденного метода мы должны создать экземпляр класса HandlerMethod.
  */
 open class HandlerMethod(
-    private val bean: Any,
+    protected val bean: Any,
     private val method: Method,
 ) {
 
