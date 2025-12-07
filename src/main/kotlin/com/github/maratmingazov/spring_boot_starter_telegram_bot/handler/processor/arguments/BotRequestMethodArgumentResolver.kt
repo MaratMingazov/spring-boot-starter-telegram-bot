@@ -1,5 +1,6 @@
 package com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.arguments
 
+import com.github.maratmingazov.spring_boot_starter_telegram_bot.annotation.BotPathVariable
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.api.TelegramBotRequest
 import org.slf4j.LoggerFactory
 import org.springframework.core.MethodParameter
@@ -11,7 +12,14 @@ class BotRequestMethodArgumentResolver(): BotHandlerMethodArgumentResolver {
     }
 
     override fun supportsParameters(methodParameter: MethodParameter): Boolean {
-        return false
+        if (methodParameter.hasParameterAnnotation(BotPathVariable::class.java)) {
+            return false
+        }
+        val paramType = methodParameter.parameterType
+        return TelegramBotRequest::class.java.isAssignableFrom(paramType) ||
+                String::class.java.isAssignableFrom(paramType)
+
+
     }
 
     override fun resolveArgument(
