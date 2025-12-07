@@ -8,5 +8,10 @@ interface BotHandlerMethodReturnValueHandler {
 
     fun supportsReturnType(returnType: MethodParameter): Boolean
 
-    fun handleReturnValue(returnValue: Any, returnType: MethodParameter, telegramBotRequest: TelegramBotRequest): BaseRequest<*,*>
+    /**
+     * Мы вызвали метод, который помечен аннотацией @BotRequest
+     * Этот метод нам вернул значение [returnValue] и у него тир [MethodParameter]
+     * Теперь нам нужно его обработать
+     */
+    fun handleReturnValue(returnValue: Any, returnType: MethodParameter, telegramBotRequest: TelegramBotRequest): BaseRequest<*,*>?
 }

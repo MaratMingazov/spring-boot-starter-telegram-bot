@@ -41,6 +41,9 @@ class TelegramInvocableHandlerMethod(
         ReflectionUtils.makeAccessible(bridgedMethod)
         try {
             val result = bridgedMethod.invoke(bean, *args)
+            /**
+             *  Результат это то, что возвращает пользовательский метод
+             */
             return result
         } catch (ex: InvocationTargetException) {
             val targetException: Throwable? = ex.getTargetException()

@@ -14,7 +14,7 @@ class BotResponseBodyMethodProcessor(): BotHandlerMethodReturnValueHandler {
         returnValue: Any,
         returnType: MethodParameter,
         telegramBotRequest: TelegramBotRequest
-    ): BaseRequest<*, *> {
+    ): BaseRequest<*, *>? {
         throw RuntimeException("")
     }
 }
