@@ -2,19 +2,40 @@ package com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.proces
 
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.api.TelegramBotRequest
 import com.pengrad.telegrambot.request.BaseRequest
+import com.pengrad.telegrambot.request.SendMessage
 import org.springframework.core.MethodParameter
+import org.springframework.core.convert.ConversionService
 
-class BotResponseBodyMethodProcessor(): BotHandlerMethodReturnValueHandler {
+class BotResponseBodyMethodProcessor(
+    private val conversionService: ConversionService
+): BotHandlerMethodReturnValueHandler {
 
     override fun supportsReturnType(returnType: MethodParameter): Boolean {
-        return false
+        return true
     }
 
     override fun handleReturnValue(
-        returnValue: Any,
+        returnValue: Any?,
         returnType: MethodParameter,
         telegramBotRequest: TelegramBotRequest
     ): BaseRequest<*, *>? {
-        throw RuntimeException("")
+        var outputValue: String? = null
+        if (returnValue is CharSequence) {
+            outputValue = returnValue.toString()
+        } else {
+            val valueType = if (returnValue != null)
+                returnValue.javaClass
+            else
+                returnType.parameterType
+            if (conversionService.canConvert(valueType, String::class.java)) {
+                outputValue = conversionService.convert(returnValue, String::class.java)
+            }
+        }
+        if (outputValue != null) {
+            if (telegramBotRequest.chat != null) {
+                return SendMessage(telegramBotRequest.chat.id(), outputValue)
+            }
+        }
+        return null
     }
 }

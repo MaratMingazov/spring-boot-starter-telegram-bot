@@ -18,7 +18,7 @@ class BotHandlerMethodReturnValueHandlerComposite(
     }
 
     override fun handleReturnValue(
-        returnValue: Any,
+        returnValue: Any?,
         returnType: MethodParameter,
         telegramBotRequest: TelegramBotRequest
     ): BaseRequest<*, *>? {

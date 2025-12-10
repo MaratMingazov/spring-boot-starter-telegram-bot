@@ -13,5 +13,5 @@ interface BotHandlerMethodReturnValueHandler {
      * Этот метод нам вернул значение [returnValue] и у него тир [MethodParameter]
      * Теперь нам нужно его обработать
      */
-    fun handleReturnValue(returnValue: Any, returnType: MethodParameter, telegramBotRequest: TelegramBotRequest): BaseRequest<*,*>?
+    fun handleReturnValue(returnValue: Any?, returnType: MethodParameter, telegramBotRequest: TelegramBotRequest): BaseRequest<*,*>?
 }
