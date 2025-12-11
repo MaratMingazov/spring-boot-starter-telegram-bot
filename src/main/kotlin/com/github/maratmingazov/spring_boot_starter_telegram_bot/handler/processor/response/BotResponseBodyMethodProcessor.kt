@@ -1,7 +1,6 @@
 package com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.response
 
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.api.TelegramBotRequest
-import com.pengrad.telegrambot.request.BaseRequest
 import com.pengrad.telegrambot.request.SendMessage
 import org.springframework.core.MethodParameter
 import org.springframework.core.convert.ConversionService
@@ -18,7 +17,7 @@ class BotResponseBodyMethodProcessor(
         returnValue: Any?,
         returnType: MethodParameter,
         telegramBotRequest: TelegramBotRequest
-    ): BaseRequest<*, *>? {
+    ): SendMessage? {
         var outputValue: String? = null
         if (returnValue is CharSequence) {
             outputValue = returnValue.toString()
@@ -33,7 +32,8 @@ class BotResponseBodyMethodProcessor(
         }
         if (outputValue != null) {
             if (telegramBotRequest.chat != null) {
-                return SendMessage(telegramBotRequest.chat.id(), outputValue)
+                val request = SendMessage(telegramBotRequest.chat.id(), outputValue)
+                return request
             }
         }
         return null

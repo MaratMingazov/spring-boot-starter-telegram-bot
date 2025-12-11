@@ -1,7 +1,7 @@
 package com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.response
 
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.api.TelegramBotRequest
-import com.pengrad.telegrambot.request.BaseRequest
+import com.pengrad.telegrambot.request.SendMessage
 import org.slf4j.LoggerFactory
 import org.springframework.core.MethodParameter
 
@@ -21,7 +21,7 @@ class BotHandlerMethodReturnValueHandlerComposite(
         returnValue: Any?,
         returnType: MethodParameter,
         telegramBotRequest: TelegramBotRequest
-    ): BaseRequest<*, *>? {
+    ): SendMessage? {
         val handler = getReturnValueHandler(returnType)
         if (handler == null) {
             logger.error("Unknown return value type: " + returnType.parameterType.getName());

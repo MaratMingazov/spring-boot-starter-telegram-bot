@@ -4,8 +4,7 @@ import com.github.maratmingazov.spring_boot_starter_telegram_bot.api.TelegramBot
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.HandlerMethodContainer
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.arguments.BotHandlerMethodArgumentResolver
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.response.BotHandlerMethodReturnValueHandler
-import com.pengrad.telegrambot.request.BaseRequest
-import com.pengrad.telegrambot.response.BaseResponse
+import com.pengrad.telegrambot.request.SendMessage
 import org.slf4j.LoggerFactory
 
 class RequestDispatcher(
@@ -21,7 +20,7 @@ class RequestDispatcher(
     /**
      * Должен найти контроллер (помеченный как @BotController) и у этого контроллера вызвать правильный метод (помеченный @BotRequest)
      */
-    fun execute(telegramEvent: TelegramBotEvent): TelegramBotCallback<*,*>? {
+    fun execute(telegramEvent: TelegramBotEvent): TelegramBotCallback? {
         // Нам нужно найти метод, в который мы передадим этот запрос
         val lookupResult = handlerMethodContainer.lookupHandlerMethod(telegramEvent)
 
@@ -40,7 +39,7 @@ class RequestDispatcher(
         lookupResult.handlerMethod?.let { handlerMethod ->
             try {
                 val result = doExecute(telegramBotRequest, handlerMethod) ?: return null
-                val callback =   TelegramBotCallback(result, null)
+                val callback = TelegramBotCallback(result, null)
                 return callback
             } catch (e: Exception) {
                 logger.error("Exception while executing TelegramEvent request", e)
@@ -55,7 +54,7 @@ class RequestDispatcher(
     private fun doExecute(
         request: TelegramBotRequest,
         handlerMethod: HandlerMethod,
-    ): BaseRequest<*,*>? {
+    ): SendMessage? {
         /**
          * У нас есть handlerMethod, который нам нужно вызвать.
          */

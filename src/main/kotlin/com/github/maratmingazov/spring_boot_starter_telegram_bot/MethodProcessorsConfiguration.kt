@@ -8,6 +8,8 @@ import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.process
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.response.BotResponseBodyMethodProcessor
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.support.ConversionServiceFactoryBean;
+import org.springframework.core.convert.ConversionService;
 
 @Configuration
 class MethodProcessorsConfiguration {
@@ -28,7 +30,16 @@ class MethodProcessorsConfiguration {
     }
 
     @Bean
-    fun botResponseBodyMethodProcessor(): BotHandlerMethodReturnValueHandler {
-        return BotResponseBodyMethodProcessor()
+    fun botResponseBodyMethodProcessor(
+        conversionService: ConversionService
+    ): BotHandlerMethodReturnValueHandler {
+        return BotResponseBodyMethodProcessor(conversionService)
+    }
+
+    @Bean
+    fun conversionService(): ConversionService {
+        val bean = ConversionServiceFactoryBean()
+        bean.afterPropertiesSet()
+        return  bean.`object`!!
     }
 }

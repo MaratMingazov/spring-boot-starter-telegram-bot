@@ -3,7 +3,7 @@ package com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.proces
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.api.TelegramBotRequest
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.arguments.BotHandlerMethodArgumentResolver
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.response.BotHandlerMethodReturnValueHandler
-import com.pengrad.telegrambot.request.BaseRequest
+import com.pengrad.telegrambot.request.SendMessage
 import org.springframework.core.DefaultParameterNameDiscoverer
 import org.springframework.util.ReflectionUtils
 import java.lang.reflect.InvocationTargetException
@@ -16,7 +16,7 @@ class TelegramInvocableHandlerMethod(
 
     private val parameterNameDiscoverer = DefaultParameterNameDiscoverer()
 
-    fun invokeAndHandle(telegramBotRequest: TelegramBotRequest): BaseRequest<*, *>? {
+    fun invokeAndHandle(telegramBotRequest: TelegramBotRequest): SendMessage? {
         /**
          * Мы значит хотим вызвать метод, помеченный аннотацией @BotRequest
          * У этого метода мы знаем параметры.

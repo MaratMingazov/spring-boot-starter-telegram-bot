@@ -1,7 +1,7 @@
 package com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.processor.response
 
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.api.TelegramBotRequest
-import com.pengrad.telegrambot.request.BaseRequest
+import com.pengrad.telegrambot.request.SendMessage
 import org.springframework.core.MethodParameter
 
 interface BotHandlerMethodReturnValueHandler {
@@ -13,5 +13,5 @@ interface BotHandlerMethodReturnValueHandler {
      * Этот метод нам вернул значение [returnValue] и у него тир [MethodParameter]
      * Теперь нам нужно его обработать
      */
-    fun handleReturnValue(returnValue: Any?, returnType: MethodParameter, telegramBotRequest: TelegramBotRequest): BaseRequest<*,*>?
+    fun handleReturnValue(returnValue: Any?, returnType: MethodParameter, telegramBotRequest: TelegramBotRequest): SendMessage?
 }
