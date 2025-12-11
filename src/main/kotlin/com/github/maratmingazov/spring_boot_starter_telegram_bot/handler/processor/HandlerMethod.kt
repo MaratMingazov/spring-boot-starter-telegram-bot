@@ -39,6 +39,10 @@ open class HandlerMethod(
     constructor(handlerMethod: HandlerMethod) : this(handlerMethod.bean, handlerMethod.method) {
     }
 
+    fun getReturnValue(returnValue: Any?): MethodParameter {
+        return ReturnValueMethodParameter(returnValue, bridgedMethod)
+    }
+
 
     /**
      * Во время запуска приложения мы перебираем все классы контроллеры и у них методы с аннотацией @BotRequest
@@ -71,4 +75,15 @@ open class HandlerMethod(
     fun simpleName(): String {
         return "${bridgedMethod.declaringClass.typeName}.${bridgedMethod.name}"
     }
+}
+
+class ReturnValueMethodParameter(
+    private val returnValue: Any?,
+    private val bridgedMethod: Method,
+): MethodParameter(bridgedMethod, -1) {
+
+    override fun getParameterType(): Class<*> {
+        return returnValue?.javaClass ?: super.getParameterType()
+    }
+
 }

@@ -26,12 +26,15 @@ class TelegramInvocableHandlerMethod(
         val args = getMethodArgumentValues(telegramBotRequest)
 
         /**
-         * теперь собственное нужно вызвать метод и передать туда эти аргументы
+         * Теперь собственное нужно вызвать метод и передать туда эти аргументы
+         * В результате мы получим значение, которое вернул метод
          */
-        val result = doSafeInvoke(args)
+        val methodResult = doSafeInvoke(args)
 
-
-        throw RuntimeException("")
+        /**
+         * Теперь это значение нужно положить в запрос, который мы отправим в телеграмм
+         */
+        return returnValueHandler.handleReturnValue(methodResult, getReturnValue(methodResult), telegramBotRequest)
     }
 
     /**
