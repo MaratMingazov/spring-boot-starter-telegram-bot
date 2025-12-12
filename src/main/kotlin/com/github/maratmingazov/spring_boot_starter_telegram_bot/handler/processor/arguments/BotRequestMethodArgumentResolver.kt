@@ -56,7 +56,6 @@ class BotRequestMethodArgumentResolver(): BotHandlerMethodArgumentResolver {
             logger.error("Current request is not of type [" + paramType.getName() + "]: " + value + "")
             return null
         }
-
         return value
     }
 }

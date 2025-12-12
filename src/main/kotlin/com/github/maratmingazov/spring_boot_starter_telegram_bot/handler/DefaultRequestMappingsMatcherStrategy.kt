@@ -32,6 +32,16 @@ class DefaultRequestMappingsMatcherStrategy(): RequestMappingsMatcherStrategy, C
         return pathMatcher.match(mappingInfo.pattern, telegramBotEvent.text);
     }
 
+    /**
+     * Если пользователь создал метод типа такого
+     *               @BotRequest(value=arrayOf("/hello {name:[\\S]+}"))
+     *               fun helloWithName(@BotPathVariable("name") userName: String): String {
+     *                   return "hi $userName"
+     *               }
+     *   То мы теперь должны в сообщение поискать такой паттерн "/hello {name:[\\S]+}"
+     *   Если например пользователь в бот напишет текст "/hello name:Marat"
+     *   то мы должны тут сказать сделать map: name -> name:Marat
+     */
     override fun extractPatternVariables(
         text: String,
         mappingInfo: RequestMappingInfo
