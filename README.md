@@ -2,7 +2,7 @@
 
 ### Gradle
 
-```json
+```
 implementation("com.github.maratmingazov:spring-boot-starter-telegram-bot:1.0.0")
 ```
 
