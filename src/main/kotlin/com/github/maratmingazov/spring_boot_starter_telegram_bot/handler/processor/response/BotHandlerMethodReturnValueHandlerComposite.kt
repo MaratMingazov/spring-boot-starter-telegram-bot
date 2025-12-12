@@ -27,7 +27,7 @@ class BotHandlerMethodReturnValueHandlerComposite(
             logger.error("Unknown return value type: " + returnType.parameterType.getName());
             return null
         }
-        return handler.handleReturnValue(handler, returnType, telegramBotRequest)
+        return handler.handleReturnValue(returnValue, returnType, telegramBotRequest)
     }
 
     private fun getReturnValueHandler(returnType: MethodParameter): BotHandlerMethodReturnValueHandler? {
