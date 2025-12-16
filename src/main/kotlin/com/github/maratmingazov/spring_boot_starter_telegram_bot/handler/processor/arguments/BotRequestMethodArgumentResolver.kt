@@ -2,6 +2,7 @@ package com.github.maratmingazov.spring_boot_starter_telegram_bot.handler.proces
 
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.annotation.BotPathVariable
 import com.github.maratmingazov.spring_boot_starter_telegram_bot.api.TelegramBotRequest
+import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.model.Chat
 import com.pengrad.telegrambot.model.Message
 import com.pengrad.telegrambot.model.Update
@@ -25,6 +26,7 @@ class BotRequestMethodArgumentResolver(): BotHandlerMethodArgumentResolver {
                 User::class.java.isAssignableFrom(paramType) ||
                 Message::class.java.isAssignableFrom(paramType) ||
                 Update::class.java.isAssignableFrom(paramType) ||
+                TelegramBot::class.java.isAssignableFrom(paramType) ||
                 String::class.java.isAssignableFrom(paramType)
 
 
@@ -45,6 +47,8 @@ class BotRequestMethodArgumentResolver(): BotHandlerMethodArgumentResolver {
             return validateValue(paramType, telegramBotRequest.message)
         } else if (Update::class.java.isAssignableFrom(paramType)) {
             return validateValue(paramType, telegramBotRequest.update)
+        } else if (TelegramBot::class.java.isAssignableFrom(paramType)) {
+            return validateValue(paramType, telegramBotRequest.telegramBot)
         } else if (String::class.java.isAssignableFrom(paramType)) {
             return validateValue(paramType, telegramBotRequest.text)
         }
